@@ -1,5 +1,7 @@
 import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
+import { router, useRouter } from "expo-router";
+import Button from "@/components/Button";
 
 export default function WelcomeScreen() {
   return (
@@ -13,6 +15,13 @@ export default function WelcomeScreen() {
       <Text style={styles.subtitle}>
         La forma más fácil y segura de realizar tus pagos.
       </Text>
+
+      <Button
+        title="Ver Productos"
+        onPress={() => router.push("/productsScreen")}
+        style={styles.button}
+        textStyle={styles.buttonText}
+      />
     </View>
   );
 }
@@ -41,5 +50,17 @@ const styles = StyleSheet.create({
     color: "#666666",
     textAlign: "center",
     paddingHorizontal: 20,
+  },
+  button: {
+    marginTop: 20,
+    backgroundColor: "#007BFF",
+    paddingVertical: 12,
+    paddingHorizontal: 25,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
