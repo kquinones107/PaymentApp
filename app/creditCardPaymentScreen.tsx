@@ -1,12 +1,29 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, Alert, KeyboardAvoidingView, Platform } from "react-native";
+import { View, Text, TextInput, StyleSheet, Alert, KeyboardAvoidingView, Platform, Image } from "react-native";
 import Button from "@/components/Button";
+
+// Función para detectar el tipo de tarjeta
+const getCardType = (cardNumber: string) => {
+    const visaRegex = /^4[0-9]{0,}$/; // Comienza con 4
+    const mastercardRegex = /^5[1-5][0-9]{0,}$/; // Comienza con 51-55
+  
+    if (visaRegex.test(cardNumber)) return "Visa";
+    if (mastercardRegex.test(cardNumber)) return "MasterCard";
+  
+    return null;
+};
 
 export default function CreditCardPaymentScreen() {
   const [cardNumber, setCardNumber] = useState("");
   const [cardHolder, setCardHolder] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
   const [cvv, setCvv] = useState("");
+  const [cardType, setCardType] = useState<string | null>(null);
+
+  const handleCardNumberChange = (text: string) => {
+    setCardNumber(text.replace(/\s?/g, "").replace(/(\d{4})/g, "$1 ").trim());
+    setCardType(getCardType(text));
+  };
 
   const handlePayment = () => {
     // Validar campos
@@ -14,6 +31,22 @@ export default function CreditCardPaymentScreen() {
       Alert.alert("Error", "Por favor, completa todos los campos.");
       return;
     }
+
+    if (!/^\d{16}$/.test(cardNumber.replace(/\s/g, ""))) {
+        Alert.alert("Error", "El número de la tarjeta es inválido.");
+        return;
+    }
+
+    if (!/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiryDate)) {
+        Alert.alert("Error", "La fecha de vencimiento es inválida.");
+        return;
+    }
+
+    if (!/^\d{3}$/.test(cvv)) {
+        Alert.alert("Error", "El CVV es inválido.");
+        return;
+    }
+  
 
     // Simulación de procesamiento de pago
     Alert.alert("Pago Exitoso", "El pago ha sido procesado correctamente.");
@@ -25,14 +58,25 @@ export default function CreditCardPaymentScreen() {
       behavior={Platform.OS === "ios" ? "padding" : undefined}
     >
       <Text style={styles.title}>Pagar con Tarjeta de Crédito</Text>
+      
+      {cardType && (
+        <Image
+          source={
+            cardType === "Visa"
+              ? require("../assets/images/visa.jpg")
+              : require("../assets/images/mastercard.png")
+          }
+          style={styles.cardLogo}
+        />
+      )}
 
       <TextInput
         style={styles.input}
         placeholder="Número de tarjeta"
         keyboardType="numeric"
         value={cardNumber}
-        onChangeText={setCardNumber}
-        maxLength={16}
+        onChangeText={handleCardNumberChange}
+        maxLength={19}
       />
       <TextInput
         style={styles.input}
@@ -67,6 +111,13 @@ const styles = StyleSheet.create({
     padding: 20,
     justifyContent: "center",
     backgroundColor: "#fff",
+  },
+  cardLogo: {
+    width: 100,
+    height: 50,
+    resizeMode: "contain",
+    alignSelf: "center",
+    marginBottom: 20,
   },
   title: {
     fontSize: 24,
