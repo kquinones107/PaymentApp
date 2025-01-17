@@ -8,7 +8,6 @@ interface Product {
     quantity: number;
     image: string;
 }
-
 interface ProductState {
     products: Product[];
 }
