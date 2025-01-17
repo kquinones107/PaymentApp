@@ -1,7 +1,10 @@
-import React from "react";
-import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity } from "react-native";
+import React, {useState} from "react";
+import { View, Text, Button, FlatList, Image, StyleSheet, TouchableOpacity, TextInput } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../src/redux/store";
+import { addProduct, removeProduct } from "../src/redux/slices/productSlice";
 
-const products = [
+const PRODUCTS = [
   {
     id: "1",
     name: "Producto A",
@@ -26,24 +29,51 @@ const products = [
 ];
 
 export default function ProductsScreen() {
-  const renderItem = ({ item }: { item: any }) => (
-    <View style={styles.productContainer}>
-      <Image source={{ uri: item.image }} style={styles.image} />
-      <View style={styles.details}>
-        <Text style={styles.name}>{item.name}</Text>
-        <Text style={styles.description}>{item.description}</Text>
-        <Text style={styles.price}>{item.price}</Text>
-      </View>
-    </View>
-  );
+  const dispatch = useDispatch();
+  const [quantity, setQuantity] = useState(1);
+  const cart = useSelector((state: RootState) => state.product.products);
+
+  const handleAddProduct = (product: { id: string; name: string; price: number }) => {
+    dispatch(addProduct({ ...product, quantity }));
+  };
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Productos Disponibles</Text>
       <FlatList
-        data={products}
+        data={PRODUCTS}
         keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-        contentContainerStyle={styles.list}
+        renderItem={({ item }) => (
+          <View style={styles.product}>
+            <Text>{item.name} - ${item.price}</Text>
+            <TextInput
+              style={styles.input}
+              keyboardType="numeric"
+              value={String(quantity)}
+              onChangeText={(value) => setQuantity(Number(value))}
+            />
+            <Button
+              title="Agregar"
+              onPress={() => handleAddProduct({ ...item, price: parseFloat(item.price.replace('$', '')) })}
+            />
+          </View>
+        )}
+      />
+      <Text style={styles.title}>Carrito:</Text>
+      <FlatList
+        data={cart}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View style={styles.product}>
+            <Text>
+              {item.name} - {item.quantity} unidad(es)
+            </Text>
+            <Button
+              title="Eliminar"
+              onPress={() => dispatch(removeProduct(item.id))}
+            />
+          </View>
+        )}
       />
     </View>
   );
@@ -52,41 +82,27 @@ export default function ProductsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
-  },
-  list: {
-    padding: 10,
-  },
-  productContainer: {
-    flexDirection: "row",
+    padding: 20,
     backgroundColor: "#fff",
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: "bold",
     marginBottom: 10,
-    borderRadius: 8,
-    overflow: "hidden",
-    elevation: 2,
   },
-  image: {
-    width: 100,
-    height: 100,
-    marginRight: 10,
-  },
-  details: {
-    flex: 1,
+  product: {
+    marginBottom: 10,
     padding: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 5,
   },
-  name: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#333",
-  },
-  description: {
-    fontSize: 14,
-    color: "#666",
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    padding: 5,
     marginVertical: 5,
-  },
-  price: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#28a745",
+    width: 50,
+    textAlign: "center",
   },
 });
