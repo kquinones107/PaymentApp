@@ -32,7 +32,7 @@ const productSlice = createSlice({
         },
         removeProduct(state, action: PayloadAction<string>) {
             state.products = state.products.filter(
-                (product) => product.id === action.payload
+                (product) => product.id !== action.payload
             );
         },
         clearProducts(state) {
