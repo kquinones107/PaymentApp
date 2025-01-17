@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, FlatList, StyleSheet, TouchableOpacity, Image } from "react-native";
+import React, {useState} from "react";
+import { View, Text, FlatList, StyleSheet, Modal, Image, TextInput, Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../src/redux/store";
 import { removeProduct } from "../src/redux/slices/productSlice";
@@ -7,18 +7,10 @@ import Button from "@/components/Button";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
-
-
-
 export default function CartScreen() {
   const cart = useSelector((state: RootState) => state.product.products);
   const dispatch = useDispatch();
     const router = useRouter();
-
-    const handleCheckout = () => {
-        // Placeholder for checkout functionality
-        alert("Procesando el pago...");
-      }; 
 
   return (
     <View style={styles.container}>
@@ -56,11 +48,12 @@ export default function CartScreen() {
       />
       {cart.length > 0 && (
         <Button
-          title="Pagar"
-          onPress={handleCheckout}
+          title="Finalizar Compra"
+          onPress={() => router.push("/paymentOptionsScreen")}
           style={styles.checkoutButton}
         />
       )}
+
     </View>
   );
 }
