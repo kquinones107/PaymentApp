@@ -8,7 +8,7 @@ import {
     FlatList 
 } from "react-native";
 import Button from "@/components/Button";
-import { useRouter } from "expo-router";
+import { router, useRouter } from "expo-router";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
 
@@ -41,13 +41,14 @@ export default function PaymentSummaryScreen() {
   
         if (response.success) {
           Alert.alert("Transacción Exitosa", "Tu pago se procesó correctamente.", [
-            { text: "OK", onPress: () => console.log("Ruta feliz manejada") },
+            { text: "OK", 
+                onPress: () => { router.push("/transactionStatusScreen?status=success" as any); console.log("Ruta feliz manejada"); } },
           ]);
         } else {
           Alert.alert(
             "Transacción Fallida",
             "Hubo un error procesando tu pago. Por favor, intenta nuevamente.",
-            [{ text: "OK", onPress: () => console.log("Ruta triste manejada") }]
+            [{ text: "OK", onPress: () => { router.push("/transactionStatusScreen?status=error" as any); console.log("Ruta triste manejada") } }]
           );
         }
       } catch (error) {
