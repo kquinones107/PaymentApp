@@ -1,13 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface Transaction {
-  id: string;
-  amount: number;
-  date: string;
-}
+import { encryptData, decryptData  } from "@/utils/encryption";
 
 interface PaymentState {
-  transactions: Transaction[];
+  transactions: string[];
 }
 
 const initialState: PaymentState = {
@@ -18,12 +13,17 @@ const paymentSlice = createSlice({
   name: "payment",
   initialState,
   reducers: {
-    addTransaction: (state, action: PayloadAction<Transaction>) => {
-      state.transactions.push(action.payload);
+    saveTransaction: (state, action: PayloadAction<string>) => {
+      encryptData(action.payload).then((encrypted) => {
+        state.transactions.push(encrypted);
+      });
+    },
+    retrieveTransactions: (state) => {
+      state.transactions = state.transactions.map(decryptData);
     },
   },
 });
 
-export const { addTransaction } = paymentSlice.actions;
+export const { saveTransaction, retrieveTransactions } = paymentSlice.actions;
 
 export default paymentSlice.reducer;

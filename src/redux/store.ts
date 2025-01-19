@@ -1,14 +1,24 @@
-import { configureStore } from "@reduxjs/toolkit";
+import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import createSecureStore from "redux-persist-expo-securestore";
-import rootReducer from "./rootReducer";
+import paymentReducer from "./slices/paymentSlice";
+import productReducer from "./slices/productSlice";
+
 
 const secureStorage = createSecureStore();
 
+
 const persistConfig = {
   key: "root",
-  storage: secureStorage,
+  storage: secureStorage, 
 };
+
+
+const rootReducer = combineReducers({
+  payment: paymentReducer,
+  product: productReducer,
+});
+
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
@@ -16,7 +26,7 @@ export const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: false,
+      serializableCheck: false, 
     }),
 });
 
