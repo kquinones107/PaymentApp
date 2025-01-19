@@ -1,6 +1,16 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, Alert, KeyboardAvoidingView, Platform, Image } from "react-native";
+import { 
+  View, 
+  Text, 
+  TextInput, 
+  StyleSheet, 
+  Alert, 
+  KeyboardAvoidingView, 
+  Platform, 
+  Image 
+} from "react-native";
 import Button from "@/components/Button";
+import { useRouter } from "expo-router";
 
 // Función para detectar el tipo de tarjeta
 const getCardType = (cardNumber: string) => {
@@ -19,6 +29,8 @@ export default function CreditCardPaymentScreen() {
   const [expiryDate, setExpiryDate] = useState("");
   const [cvv, setCvv] = useState("");
   const [cardType, setCardType] = useState<string | null>(null);
+
+  const router = useRouter();
 
   const handleCardNumberChange = (text: string) => {
     setCardNumber(text.replace(/\s?/g, "").replace(/(\d{4})/g, "$1 ").trim());
@@ -49,7 +61,12 @@ export default function CreditCardPaymentScreen() {
   
 
     // Simulación de procesamiento de pago
-    Alert.alert("Pago Exitoso", "El pago ha sido procesado correctamente.");
+    Alert.alert("Pago Exitoso", "El pago ha sido procesado correctamente.", [
+      {
+        text: "Ok",
+        onPress: () => router.push("/paymentSummaryScreen" as any),
+      },
+    ]);
   };
 
   return (
