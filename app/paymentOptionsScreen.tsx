@@ -2,12 +2,13 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import Button from "@/components/Button";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PaymentOptionsScreen() {
   const router = useRouter();
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Selecciona el tipo de pago</Text>
 
       <Button
@@ -25,7 +26,7 @@ export default function PaymentOptionsScreen() {
         onPress={() => alert("Pago con tarjeta de débito seleccionado")}
         style={styles.button}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

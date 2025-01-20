@@ -3,17 +3,16 @@ import { View, Text, StyleSheet, Image } from "react-native";
 import Button from "@/components/Button";
 import { useRouter } from "expo-router";
 import { useLocalSearchParams } from "expo-router";
-import { RootState } from "@/redux/store";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function TransactionStatusScreen() {
   const router = useRouter();
-  const { status } = useLocalSearchParams(); // Recibir parámetro "status" (éxito o error)
+  const { status } = useLocalSearchParams(); // Recibe parámetro "status" (éxito o error)
 
   const isSuccess = status === "success"; // Determina si fue éxito o error
 
   return (
-    <View style={styles.container}>
-      {/* Mensaje dinámico basado en el estado */}
+    <SafeAreaView style={styles.container}>
       {isSuccess ? (
         <Image
           source={require("../assets/images/success.png")}
@@ -37,10 +36,10 @@ export default function TransactionStatusScreen() {
 
       <Button
         title="Volver a Productos"
-        onPress={() => router.push("/productsScreen")} // Navegar a la pantalla de productos
+        onPress={() => router.push("/productsScreen")}
         style={styles.button}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -6,6 +6,7 @@ import { addProduct, removeProduct } from "../src/redux/slices/productSlice";
 import { router, useRouter} from "expo-router";
 import Button from "@/components/Button";
 import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const PRODUCTS = [
   {
@@ -75,15 +76,17 @@ export default function ProductsScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Productos Disponibles</Text>
-      <Ionicons 
-        name="cart" 
-        size={28}   
-        color="black"
-        style={styles.cartIcon}
-        onPress={() => router.push("/cartScreen")} 
-      />
+    <SafeAreaView style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Productos Disponibles</Text>
+        <Ionicons 
+          name="cart" 
+          size={28}   
+          color="black"
+          style={styles.cartIcon}
+          onPress={() => router.push("/cartScreen")} 
+        />
+      </View>
       <FlatList
         data={PRODUCTS}
         keyExtractor={(item) => item.id}
@@ -107,7 +110,7 @@ export default function ProductsScreen() {
           </View>
         )}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -163,4 +166,11 @@ const styles = StyleSheet.create({
     top: 10,
     right: 10,
   },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 20,
+  },
+
 });

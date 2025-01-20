@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Text, View, Image, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
 
@@ -15,13 +16,13 @@ export default function Index() {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Image
         source={require("../assets/images/logo.jpg")}
         style={styles.logo}
         resizeMode="contain"
       />
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -2,10 +2,11 @@ import React from "react";
 import { View, Text, Image, StyleSheet } from "react-native";
 import { router, useRouter } from "expo-router";
 import Button from "@/components/Button";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function WelcomeScreen() {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Image
         source={require("../assets/images/logo.jpg")}
         style={styles.logo}
@@ -22,7 +23,7 @@ export default function WelcomeScreen() {
         style={styles.button}
         textStyle={styles.buttonText}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
