@@ -58,7 +58,7 @@ export default function CreditCardPaymentScreen() {
         return;
     }
   
-    Alert.alert("Pago Exitoso", "El pago ha sido procesado correctamente.", [
+    Alert.alert("Registro Exitoso", "El pago ha sido registrado correctamente.", [
       {
         text: "Ok",
         onPress: () => router.push("/paymentSummaryScreen" as any),
@@ -114,7 +114,7 @@ export default function CreditCardPaymentScreen() {
         maxLength={3}
       />
 
-      <Button title="Procesar Pago" onPress={handlePayment} style={styles.button} />
+      <Button title="Registrar Pago" onPress={handlePayment} style={styles.button} />
     </KeyboardAvoidingView>
   );
 }
