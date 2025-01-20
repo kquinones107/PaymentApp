@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React from "react";
 import { View, Text, FlatList, StyleSheet, Modal, Image, TextInput, Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../src/redux/store";
@@ -6,6 +6,7 @@ import { removeProduct } from "../src/redux/slices/productSlice";
 import Button from "@/components/Button";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function CartScreen() {
   const cart = useSelector((state: RootState) => state.product.products);
@@ -13,7 +14,7 @@ export default function CartScreen() {
     const router = useRouter();
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Ionicons
           name="arrow-back"
@@ -56,7 +57,7 @@ export default function CartScreen() {
         />
       )}
 
-    </View>
+    </SafeAreaView>
   );
 }
 

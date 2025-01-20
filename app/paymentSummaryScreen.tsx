@@ -11,8 +11,7 @@ import Button from "@/components/Button";
 import { router, useRouter } from "expo-router";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
-
-
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PaymentSummaryScreen() {
 
@@ -63,10 +62,9 @@ export default function PaymentSummaryScreen() {
     };
   
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <Text style={styles.title}>Resumen de Pago</Text>
   
-        {/* Lista de productos en el carrito */}
         <FlatList
           data={cart}
           keyExtractor={(item) => item.id}
@@ -79,10 +77,8 @@ export default function PaymentSummaryScreen() {
           )}
         />
   
-        {/* Total */}
         <Text style={styles.total}>Total a pagar: ${total.toFixed(2)}</Text>
   
-        {/* Indicador de carga o botón */}
         {isLoading ? (
           <ActivityIndicator size="large" color="#007BFF" style={styles.loader} />
         ) : (
@@ -92,7 +88,7 @@ export default function PaymentSummaryScreen() {
             style={styles.button}
           />
         )}
-      </View>
+      </SafeAreaView>
     );
   }
     

@@ -38,7 +38,6 @@ export default function CreditCardPaymentScreen() {
   };
 
   const handlePayment = () => {
-    // Validar campos
     if (!cardNumber || !cardHolder || !expiryDate || !cvv) {
       Alert.alert("Error", "Por favor, completa todos los campos.");
       return;
@@ -59,8 +58,6 @@ export default function CreditCardPaymentScreen() {
         return;
     }
   
-
-    // Simulación de procesamiento de pago
     Alert.alert("Pago Exitoso", "El pago ha sido procesado correctamente.", [
       {
         text: "Ok",
