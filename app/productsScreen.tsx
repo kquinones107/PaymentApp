@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, TextInput } from "react-native";
+import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, TextInput, Alert } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../src/redux/store";
 import { addProduct, removeProduct } from "../src/redux/slices/productSlice";
@@ -10,24 +10,38 @@ import { Ionicons } from "@expo/vector-icons";
 const PRODUCTS = [
   {
     id: "1",
-    name: "Producto A",
-    description: "Descripción del producto A",
-    price: "$10.00",
-    image: "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/0c6cbabf-99c6-4dbd-b848-959d5ae7695f/NIKE+AIR+FORCE+1+GS.png",
+    name: "Nike Air Force 1",
+    description: "Calzado para niños grandes",
+    price: "$80.00",
+    image: require("../assets/images/nike_AF1_black.png"),
   },
   {
     id: "2",
-    name: "Producto B",
-    description: "Descripción del producto B",
-    price: "$15.00",
-    image: "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/743aa180-7faf-4386-9286-6cf49d4cd394/AIR+FORCE+1+%2707.png",
+    name: "Nike Air Diamond Varsity Turf",
+    description: "Calzado de béisbol para hombre",
+    price: "$75.00",
+    image: require("../assets/images/AIR_DIAMOND_VARSITY.png"),
   },
   {
     id: "3",
-    name: "Producto C",
-    description: "Descripción del producto C",
-    price: "$20.00",
-    image: "https://static.nike.com/a/images/c_limit,w_592,f_auto/t_product_v1/f4220f77-cc51-4b4c-9acb-9fcd283b0ca3/AIR+FORCE+1+%28GS%29.png",
+    name: "Air Jordan 1",
+    description: "Tenis para hombre",
+    price: "$120.00",
+    image: require("../assets/images/AIR_JORDAN_1.png"),
+  },
+  {
+    id: "4",
+    name: "wmns nike quest",
+    description: "Tenis de correr para mujer",
+    price: "$70.00",
+    image: require("../assets/images/WMNS_NIKE_QUEST.png"),
+  },
+  {
+    id: "5",
+    name: "wmns jordan mvp",
+    description: "Tenis para mujer",
+    price: "$120.00",
+    image: require("../assets/images/WMNS_JORDAN_MVP.png"),
   },
 ];
 
@@ -37,8 +51,27 @@ export default function ProductsScreen() {
   const cart = useSelector((state: RootState) => state.product.products);
   const router = useRouter();
 
+  const [quantities, setQuantities] = useState<{ [key: string]: number }>({});
+
+  const handleQuantityChange = (productId: string, value: string) => {
+    const numericValue = Number(value);
+    if (!isNaN(numericValue)) {
+      setQuantities((prevQuantities) => ({
+        ...prevQuantities,
+        [productId]: numericValue,
+      }));
+    }
+  };
+
   const handleAddProduct = (product: { id: string; name: string; price: number; description: string; image: string }) => {
-    dispatch(addProduct({ ...product, quantity }));
+    const quantity = quantities[product.id] || 0;
+    if (quantity > 0){
+      dispatch(addProduct({ ...product, quantity }));
+      Alert.alert("Agregado al carrito", `${product.name} agregado exitosamente.`);
+    } else {
+      alert("La cantidad debe ser mayor a 0");
+    }
+    
   };
 
   return (
@@ -56,14 +89,14 @@ export default function ProductsScreen() {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View style={styles.product}>
-            <Image source={{ uri: item.image }} style={styles.image} />
+            <Image source={ item.image  } style={styles.image} />
             <Text style={styles.description}>{item.description}</Text>
             <Text>{item.name} - ${item.price}</Text>
             <TextInput
               style={styles.input}
               keyboardType="numeric"
-              value={String(quantity)}
-              onChangeText={(value) => setQuantity(Number(value))}
+              value={quantities[item.id]?.toString() || ""}
+              onChangeText={(value) => handleQuantityChange(item.id, value)}
             />
             <Button
               title="Agregar"
